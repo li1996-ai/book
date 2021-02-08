@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zr.dao.UserAddressDao">
+    <resultMap id="result" type="com.zr.model.UserAddress">
+        <result property="province" column="province"></result>
+        <result property="city" column="city"></result>
+        <result property="country" column="country"></result>
+<!--        <association property="userAddressCity" javaType="com.zr.model.UserAddressCity" >-->
+<!--            <result property="b_city" column="city"></result>-->
+<!--            <association property="userAddressCounty" javaType="com.zr.model.UserAddressCounty">-->
+<!--                <result property="c_country" column="country"></result>-->
+<!--            </association>-->
+<!--        </association>-->
+    </resultMap>
+
+
+    <select id="select" resultMap="result">
+        select * from user_Address GROUP BY county;
+    </select>
+
+    <select id="findmonty" resultType="java.lang.String">
+        select county from user_Address GROUP BY county;
+    </select>
+
+    <select id="findData" resultType="java.lang.Integer">
+        SELECT count(*) FROM user_Address where county = #{county}
+    </select>
+
+    <select id="findPro" resultType="java.lang.String">
+        SELECT province FROM user_Address GROUP BY province
+    </select>
+
+    <select id="findCity" resultType="java.lang.String" >
+        SELECT city FROM user_Address where province = #{province} GROUP BY city
+    </select>
+
+    <select id="findCounty" resultMap="result" >
+        SELECT province,city,county FROM user_Address where city = #{city} GROUP BY county
+    </select>
+
+    <select id="findAddress" resultType="com.zr.model.UserAddress">
+       SELECT
+	a.province,
+	b.city AS b_city,
+	c.county AS c_county
+    FROM
+	user_address a
+    LEFT JOIN user_address b ON a.province = b.province
+    LEFT JOIN user_address c ON b.city = c.city
+    GROUP BY
+	c_county ASC
+    </select>
+
+</mapper>

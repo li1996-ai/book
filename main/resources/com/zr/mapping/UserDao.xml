@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zr.dao.UserDao">
+    <resultMap id="result" type="com.zr.model.User">
+        <result property="userId" column="userId"></result>
+        <result property="userDate" column="userDate"></result>
+        <result property="userName" column="userName"></result>
+        <result property="userAge" column="userAge"></result>
+        <result property="userAddress" column="userAddress"></result>
+    </resultMap>
+
+    <select id="findName"  resultType="java.lang.String">
+        SELECT userName FROM user where userName = #{userName}
+    </select>
+
+
+    <select id="findUser"  resultType="java.lang.String">
+        SELECT userName FROM user GROUP BY userName
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+       SELECT count(*) FROM user where userName = #{userName} group by userName
+    </select>
+
+
+    <select id="findSumUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT count(*) FROM user WHERE userId= #{userId}
+  </select>
+
+    <select id="ListUser" resultMap="result">
+        select * from user order by userId asc;
+    </select>
+
+    <select id="findUserName" resultMap="result">
+        select userName from user GROUP BY userName;
+    </select>
+
+
+    <select id="findUserByName" parameterType="String" resultMap="result">
+        select * from user where userName like concat(concat('%',#{username},'%')) order by userId desc;
+    </select>
+
+
+    <select id="queryPage" parameterType="Integer" resultMap="result">
+        select * from user order by userId asc limit #{startRows},5;
+    </select>
+
+
+    <select id="getRow" resultType="java.lang.Integer">
+        select count(*) from user;
+    </select>
+
+    <!--插入数据-->
+    <insert id="insertUser" parameterType="com.zr.model.User">
+        insert into user(userId,userDate,userName,userAge,userAddress) values (
+        #{userId},
+        #{userDate,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR},
+        #{userAge,jdbcType=VARCHAR},
+        #{userAddress,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from user where userId=#{userId}
+    </delete>
+
+
+    <update id="Update" parameterType="com.zr.model.User">
+        update user
+            set user.userDate=#{userDate},
+                user.userName=#{userName},
+                user.userAge=#{userAge},
+                user.userAddress=#{userAddress}
+                    where user.userId=#{userId};
+    </update>
+
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zr.dao.ProCCDao">
+  <resultMap id="BaseResultMap" type="com.zr.model.ProCC">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="PARENT_ID" jdbcType="VARCHAR" property="parent_id" />
+    <result column="CNAME" jdbcType="VARCHAR" property="cname" />
+    <result column="CTYPE" jdbcType="VARCHAR" property="ctype" />
+  </resultMap>
+
+  <select id="findPro" resultMap="BaseResultMap">
+         select id,cname from procc where parent_id = 1
+  </select>
+
+    <select id="findId" resultType="java.lang.Integer">
+         select id from procc where cname = #{cname}
+  </select>
+
+  <select id="findCity" resultMap="BaseResultMap">
+         select id,cname from procc where parent_id = (select id from procc where cname = #{cname})
+  </select>
+
+  <select id="findCounty" resultMap="BaseResultMap">
+         select id,cname from procc where parent_id = (select id from procc where cname = #{cname})
+  </select>
+
+
+</mapper>
